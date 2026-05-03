@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, Ship } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,10 +22,10 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "About Us", path: "#about" },
-    { name: "Services", path: "#services" },
-    { name: "Industry Solutions", path: "#industries" },
-    { name: "Contact", path: "#contact" },
+    { name: "About Us", path: "/about" },
+    { name: "Services", path: "/services" },
+    { name: "Industry Solutions", path: "/industry" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -42,13 +44,17 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <nav className={styles.desktopNav}>
           {navLinks.map((link, index) => (
-            <Link key={index} href={link.path} className={styles.navLink}>
+            <Link 
+              key={index} 
+              href={link.path} 
+              className={`${styles.navLink} ${pathname === link.path ? styles.active : ""}`}
+            >
               {link.name}
             </Link>
           ))}
-          <a href="#track" className={`btn btn-primary ${styles.trackBtn}`}>
+          <Link href="/contact" className={`btn btn-primary ${styles.trackBtn}`}>
             Track Shipment
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile Toggle */}
@@ -72,20 +78,20 @@ export default function Navbar() {
             <Link
               key={index}
               href={link.path}
-              className={styles.mobileNavLink}
+              className={`${styles.mobileNavLink} ${pathname === link.path ? styles.active : ""}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.name}
             </Link>
           ))}
-          <a
-            href="#track"
+          <Link
+            href="/contact"
             className="btn btn-primary"
             onClick={() => setIsMobileMenuOpen(false)}
             style={{ width: "fit-content", margin: "1rem auto", display: "block" }}
           >
             Track Shipment
-          </a>
+          </Link>
         </motion.nav>
       )}
     </motion.header>
